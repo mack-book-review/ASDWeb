@@ -30,11 +30,13 @@
 		configureContainerEventListeners(){
 			var currentGame = this;
 			this.container.addEventListener("gamewon", function(){
-				console.log("Event listener: game win");
+				
 				currentGame.scene.isWon = true;
+
 				var msg = UIGenerator.CreateNextLevelMessage("Congratulations! You won!",
 					150,150,
-					"/assets/Medals/flat_medal1.png",function(){
+					"/assets/Medals/flat_medal1.png",
+					function(){
 						var nextLevel = currentGame.scene.levelConfiguration.levelNumber + 1;
 						
 						if(window.location.href.substr(window.location.href.length-2,window.location.href.length-1) == "#"){
@@ -51,18 +53,18 @@
 			});
 
 
-			this.container.addEventListener("gamelost", function(){
-				currentGame.scene.isLost = true;
+			this.container.addEventListener("gamelost", 
+				function(){
+					currentGame.scene.isLost = true;
 
-				console.log("Event listener: game lost");
-				var msg = UIGenerator.CreateGameFinishedMessage("I'm Sorry! You Lost!",150,150,"/assets/Smilies/cry.gif");
-				currentGame.addToContainer(msg);
+					var msg = UIGenerator.CreateGameFinishedMessage("I'm Sorry! You Lost!",150,150,"/assets/Smilies/cry.gif");
+					currentGame.addToContainer(msg);
 
 			});
 
 
 			this.container.addEventListener("hudupdate", function(event){
-				console.log(event);
+				
 				var sprites = event.detail.totalSprites;
 				var kills = event.detail.killCount;
 				currentGame.updateHUD(sprites,kills);
@@ -185,7 +187,7 @@
 
 
 		
-		addToContainer(element,zIndex = 0){
+		addToContainer(element){
 			this.container.appendChild(element);
 		}
 
