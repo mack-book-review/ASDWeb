@@ -17,7 +17,6 @@ class UIGenerator{
 		menuPanel.style.left =  "700px";
 		menuPanel.style.width =  "300px";
 		menuPanel.style.height = "500px";
-		menuPanel.style.border = "solid 2px black";
 
 		return menuPanel;
 	}
@@ -222,7 +221,8 @@ class UIGenerator{
 				}
 			});
 
-			UIGenerator.ConfigureMessageBox(message,messageTxt,top,left,500,200);
+			UIGenerator.ConfigureMessageBox(message,messageTxt,top,left,
+				GAME_SETTINGS.DefaultScreenWidth*0.5,GAME_SETTINGS.DefaultScreenHeight*0.6);
 			
 			var breakElement = document.createElement("br");
 	
@@ -255,7 +255,9 @@ class UIGenerator{
 				}
 			});
 
-			UIGenerator.ConfigureMessageBox(message,messageTxt,top,left,500,200);
+			UIGenerator.ConfigureMessageBox(message,messageTxt,top,left,
+				GAME_SETTINGS.DefaultScreenWidth*0.5,
+				GAME_SETTINGS.DefaultScreenHeight*0.5);
 			
 			var breakElement = document.createElement("br");
 	
@@ -472,7 +474,7 @@ class UIGenerator{
 
 	static ConfigureMessageBox(message,messageTxt,top,left,
 		width = GAME_SETTINGS.getScreenWidth()*0.90, 
-		height = GAME_SETTINGS.getScreenHeight()*0.60){
+		height = GAME_SETTINGS.getScreenHeight()*0.40){
 
 			message.style.position = 'absolute';
 			message.style.display = 'block';

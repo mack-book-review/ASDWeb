@@ -6,6 +6,8 @@ class BaseScene{
 
 			//Initialize Timer Variables
 			this.timer = 0;
+			this.clockTime = 0;
+			this.timeRemaing = 60;
 
 			//Initialize game states
 			this.isPaused = false;
@@ -49,16 +51,6 @@ class BaseScene{
 			this.sprites.push(sprite);
 		}
 
-		getTimeLimit(){
-			return 60;
-		}
-
-		getTimeRemaining(){
-
-			var clockTime = Math.floor(this.timer / 1000);
-			return this.getTimeLimit() - clockTime;
-		}
-
 
 		//Run the game loop
 		runGame(){
@@ -95,9 +87,9 @@ class BaseScene{
 				scene.updateAnimations(timeDiff);
 
 				//Draw the time remaing on the canvas
-				//currentGame.clockTime = Math.floor(currentGame.timer / 1000);
-				//currentGame.timeRemaining = currentGame.levelConfiguration.timeLimit - currentGame.clockTime;
-				scene.drawText("Time Remaining: " + scene.getTimeRemaining(),10,20);
+				scene.clockTime = Math.floor(scene.timer / 1000);
+				scene.timeRemaining = scene.levelConfiguration.timeLimit - scene.clockTime;
+				scene.drawText("Time Remaining: " + scene.timeRemaining,10,20);
 				
 
 				//Check if game win or loss conditions have been satisfied

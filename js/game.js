@@ -34,7 +34,7 @@
 				currentGame.scene.isWon = true;
 
 				var msg = UIGenerator.CreateNextLevelMessage("Congratulations! You won!",
-					150,150,
+					200,200,
 					"/assets/Medals/flat_medal1.png",
 					function(){
 						var nextLevel = currentGame.scene.levelConfiguration.levelNumber + 1;
@@ -57,7 +57,7 @@
 				function(){
 					currentGame.scene.isLost = true;
 
-					var msg = UIGenerator.CreateGameFinishedMessage("I'm Sorry! You Lost!",150,150,"/assets/Smilies/cry.gif");
+					var msg = UIGenerator.CreateGameFinishedMessage("I'm Sorry! You Lost!",200,200,"/assets/Smilies/annoyed.png");
 					currentGame.addToContainer(msg);
 
 			});

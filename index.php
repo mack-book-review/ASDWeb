@@ -19,14 +19,6 @@ font-family: 'Sigmar One', cursive;
 
 */
 
-	#start-game-button{
-		background-color: tomato;
-		border-radius: 10%;
-		border:  solid 2px black;
-		color:  white;
-		padding:  20px;
-		cursor: pointer;
-	}
 
 	#game-container{
 		width:  90%;
@@ -36,6 +28,25 @@ font-family: 'Sigmar One', cursive;
 		border:  black 2px solid;
 		font-family: 'Press Start 2P', cursive;
 
+	}
+
+	#start-game-button{
+		position:  relative;
+		display: block;
+		width:  30%;
+		height: 20%;
+		text-align: center;
+		margin: auto;
+		margin-top: 2em;
+		color: white;
+		font-size: 5em;
+		font-family: "Bangers";
+		background-color: tomato;
+		border-radius: 20%;
+		border:  solid 2px black;
+		color:  white;
+		padding:  1em;
+		cursor: pointer;
 	}
 
 </style>
@@ -75,8 +86,37 @@ font-family: 'Sigmar One', cursive;
 
             // This function will be called once the page loads completely
 
-            function loadGame(container_id){
+            function configureButtonText(){
 
+            	var startButton = document.getElementById("start-game-button");
+
+
+
+            	var endStr = window.location.href.substring(window.location.href.length-2,window.location.href.length);
+
+            	var hash = endStr.substring(0,1);
+            	var level = parseInt(endStr.substring(1,2));
+            	console.log(hash);
+            	console.log(level);
+
+            	if(hash == "#" && hash != undefined && level > 1){
+
+            		startButton.appendChild(document.createTextNode("Continue to Level " + level));
+
+            	} else {
+            		startButton.appendChild(document.createTextNode("Start Game"));
+            	}
+
+
+
+            }
+
+            function loadGame(container_id){
+            	var startButton = document.getElementById("start-game-button");
+
+
+
+            	startButton.remove();
 				//Declare the global game settings as a constant
 				var scene = new Scene();
 				var game = new Game(scene, container_id);
@@ -89,12 +129,12 @@ font-family: 'Sigmar One', cursive;
 
         </script>
     </head>
-    <body>
+    <body onload="configureButtonText()">
 
     	<div id="game-container">
-
+			<a id="start-game-button"></a>
     	</div>
-    	<a id="start-game-button">Start Game</a>
+
 
     	<script type="text/javascript">
     		var button = document.getElementById("start-game-button");
