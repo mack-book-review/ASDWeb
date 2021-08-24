@@ -1,32 +1,11 @@
 
-	class Scene{
+	class Scene extends BaseScene{
 
 		constructor(){
 			
-			//Initialize Game :oop ID
-			this.gameLoopID = 0;
+			super();
 
-			//Initialize Timer Variables
-			this.timer = 0;
-			this.timeRemaining = 60;
-			this.clockTime = 0;
 
-			//Initialize game states
-			this.isPaused = false;
-			this.isLost = false;
-			this.isWon = false;
-
-			//Initialize current background animation
-			this.currrenbackgroundAnimation = null;
-
-			//Initialize game sprites array
-			this.sprites = [];
-
-			//Instantiate the canvas before instantiating the player and other sprites
-			//Sprites will require a reference to the canvas on which they are drawn
-			this.createCanvasElement();
-			this.context = this.canvasElement.getContext('2d');
-			
 			//Instantiate player
 			this.createPlayer();
 			this.configureShootAudio("assets/Sounds/laser2.ogg");
@@ -134,65 +113,10 @@
 				startPos[1],
 				this.canvasElement);
 		}
-
-
-		addSprite(sprite){
-			this.sprites.push(sprite);
-		}
-
 	
 
-		createCanvasElement(){
-			this.canvasElement = document.createElement("canvas");
-			this.configureCanvasElement(this.canvasElement);
-	
-		}
-
-		getCanvasElement(){
-			return this.canvasElement;
-		}
-
-		configureCanvasElement(canvasElement){
-			UIGenerator.ConfigureCanvas(canvasElement);
-
-		}
-
-		configureMenuButton(button,topDistance){
-			UIGenerator.ConfigureMenuButton(button,topDistance);
 		
-		}
-
-		
-
-		drawText(someText,x,y){
-			this.context.strokeStyle = "white";
-			this.context.font = '30 pt Times New Roman';
-			this.context.strokeText(someText,x,y);
-
-		}
-
-		drawBackgroundImg(){
-			var backgroundImg = new Image();
-			backgroundImg.src = GAME_SETTINGS.getBackgroundImgPath();
-
-			this.context.drawImage(
-				backgroundImg,
-				0,0,
-				backgroundImg.naturalWidth,
-				backgroundImg.naturalHeight,
-				0,0,
-				GAME_SETTINGS.screenWidth,
-				GAME_SETTINGS.screenHeight
-				);
-		}
-
 		/** HUD-related Helper Functions **/
-		createHUD(){
-		
-			this.hud = new HUD(this.container,GAME_SETTINGS);
-			this.hud.addHUD();
-
-		}
 
 
 		getTotalEnemies(){
@@ -209,7 +133,8 @@
 		/** Various 'hooks' for game loop **/
 
 		updatePhysics(timeDiff){
-			
+			super.updatePhysics(timeDiff);
+
 			this.player.updatePhysics(timeDiff);
 			
 			this.spriteGenerators.forEach(function(spriteGenerator){
@@ -224,9 +149,8 @@
 		
 
 		updateAnimations(timeDiff){
+			super.updateAnimations(timeDiff);
 
-			//Draw the background image
-			this.drawBackgroundImg();
 
 			this.spriteGenerators.forEach(function(spriteGenerator){
 
@@ -241,110 +165,15 @@
 
 		}
 
-		/** Trigger artificial events **/
-		generateGameWinEvent(){
-			console.log("Generating game win event...");
-			const event = new CustomEvent('gamewon',{bubbles:true});
-			this.canvasElement.dispatchEvent(event);
+		
+		hasWonGame(){
+			return this.getTotalEnemies() == 0;
 		}
 
-		generateGameLossEvent(){
-			console.log("Generating game loss event...");
-			const event = new CustomEvent('gamelost',{bubbles:true});
-			this.canvasElement.dispatchEvent(event);
+		hasLostGame(){
+			return this.timeRemaining == 0;
 		}
 
-		checkForGameWinOrLoss(){
 
-			var currentGame = this;
-
-			if(currentGame.timeRemaining == 0){
-				
-				currentGame.generateGameLossEvent();
-				
-			}
-
-			if(currentGame.getTotalEnemies() == 0){
-				
-				currentGame.generateGameWinEvent();
-
-			}
-		}
-
-	
-		//Run the game loop
-		runGame(){
-
-			
-			//Initialize timer-related variables
-			var lastTime = Date.now();
-			var currentTime = lastTime;
-			var timeDiff = lastTime - currentTime;
-
-			/** Store references to the current game,
-			 * current context, canvas, etc. **/			
-			var currentGame = this;
-			var context = this.context;
-			var canvas = this.canvasElement;
-	
-
-			this.gameLoopID = setInterval(function(){
-				if(currentGame.isPaused || currentGame.isLost || currentGame.isWon){
-					return;
-				}
-
-				//Calculate time difference
-				timeDiff = lastTime - currentTime;
-				currentTime = lastTime;
-				currentGame.timer += timeDiff;
-
-
-			
-				//Clear the canvas before drawing other game objects
-				context.clearRect(0,0,canvas.width,canvas.height);
-				
-				//Update physics, animation, HUD, etc.
-				currentGame.updatePhysics(timeDiff);
-				currentGame.updateAnimations(timeDiff);
-
-				currentGame.clockTime = Math.floor(currentGame.timer / 1000);
-				currentGame.timeRemaining = currentGame.levelConfiguration.timeLimit - currentGame.clockTime;
-				currentGame.drawText("Time Remaining: " + currentGame.timeRemaining,10,20);
-				
-
-
-				//Check if game win or loss conditions have been satisfied
-				currentGame.checkForGameWinOrLoss();
-
-				//Reset the last time
-				lastTime = Date.now();
-
-			}, GAME_SETTINGS.frameRate);
-
-		}
-
-		//Start Game
-		startGame(){
-			this.runGame();
-
-		}
-
-		//Restart Game
-		restartGame(){
-			this.runGame();
-
-		}
-
-		//Pause Game
-		pauseGame(){
-			clearInterval(this.gameLoopID);
-
-		}
-
-		//End Game
-		endGame(){
-			clearInterval(this.gameLoopID);
-
-		}
 
 	};

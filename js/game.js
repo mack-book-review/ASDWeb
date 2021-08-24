@@ -35,11 +35,11 @@
 			var currentGame = this;
 			this.container.addEventListener("gamewon", function(){
 				console.log("Event listener: game win");
-				currentGame.isWon = true;
+				currentGame.scene.isWon = true;
 				var msg = UIGenerator.CreateNextLevelMessage("Congratulations! You won!",
 					150,150,
 					"/assets/Medals/flat_medal1.png",function(){
-						var nextLevel = currentGame.levelConfiguration.levelNumber + 1;
+						var nextLevel = currentGame.scene.levelConfiguration.levelNumber + 1;
 						
 						if(window.location.href.substr(window.location.href.length-2,window.location.href.length-1) == "#"){
 							window.location =window.location.href.substr(0,window.location.href-2) + nextLevel; 
@@ -56,7 +56,7 @@
 
 
 			this.container.addEventListener("gamelost", function(){
-				currentGame.isLost = true;
+				currentGame.scene.isLost = true;
 
 				console.log("Event listener: game lost");
 				var msg = UIGenerator.CreateGameFinishedMessage("I'm Sorry! You Lost!",150,150,"/assets/Smilies/cry.gif");
@@ -265,10 +265,12 @@
 
 		}
 
-			configureMenuButton(button,topDistance){
+		configureMenuButton(button,topDistance){
 			UIGenerator.ConfigureMenuButton(button,topDistance);
 		
 		}
+
+	
 
 		/** Helper methods for creating and configuring background music **/
 		setupBGMusic(){

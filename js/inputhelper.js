@@ -1,7 +1,7 @@
 class InputHelper{
 
 
-	static ConfigureCanvasKeyboardControls(currentGame){
+	static ConfigureCanvasKeyboardControls(scene){
 
 			
 			document.addEventListener('keydown',event =>{
@@ -10,29 +10,29 @@ class InputHelper{
 				event.preventDefault();
 				//Down key
 				if(event.keyCode == 40) {
-						currentGame.player.keyDown();	
+						scene.player.keyDown();	
       			}
 
       			//Up key
       			if(event.keyCode == 38) {
-						currentGame.player.keyUp();
+						scene.player.keyUp();
       			}
 
       			//Left key
       			if(event.keyCode == 37) {
-						currentGame.player.keyLeft();     				       	
+						scene.player.keyLeft();     				       	
       			}
 
       			//Right key
       			if(event.keyCode == 39) {
-         				currentGame.player.keyRight();
+         				scene.player.keyRight();
       			}
 
       			//Hit spacebar
       			if(event.keyCode == 32) {
 
       		
-         			currentGame.playerShootHandler();
+         			scene.playerShootHandler();
       			}
 
 			});

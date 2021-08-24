@@ -43,8 +43,6 @@ class Alien extends Sprite{
 			}
 		}
 
-		
-
 		updatePhysics(timeDiff){
 			this.moveRandomly(timeDiff);
 		}

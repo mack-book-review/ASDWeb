@@ -58,6 +58,7 @@ font-family: 'Sigmar One', cursive;
 <script src="js/inputhelper.js"></script>
 <script src="js/levelconfiguration.js"></script>
 <script src="js/levelloader.js"></script>
+<script src="js/basescene.js"></script>
 <script src="js/scene.js"></script>
 <script src="js/game.js"></script>
 <script type = "text/javascript" charset = "utf-8">
