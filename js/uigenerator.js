@@ -10,6 +10,166 @@ class UIGenerator{
 
 	};
 
+	static GetMenuPanel(scene){
+		var menuPanel = document.createElement('div');
+		menuPanel.style.position =  "relative";
+		menuPanel.style.top =  "40px";
+		menuPanel.style.left =  "700px";
+		menuPanel.style.width =  "300px";
+		menuPanel.style.height = "500px";
+		menuPanel.style.border = "solid 2px black";
+
+		return menuPanel;
+	}
+
+	static GetPauseButton(scene){
+		var pauseButton = document.createElement("a");
+
+		UIGenerator.ConfigureMenuButton(pauseButton);
+
+
+		var pauseText = document.createTextNode("Pause Game");
+		var resumeText = document.createTextNode("Restart Game");
+		pauseButton.appendChild(pauseText);
+		
+		pauseButton.addEventListener("click", 
+				function(){
+				if(!scene.isPaused){
+					scene.pauseGame();
+					scene.isPaused = true;
+					pauseButton.removeChild(pauseText);
+					pauseButton.appendChild(resumeText);
+				} else {
+					scene.startGame();
+					scene.isPaused = false;
+					pauseButton.removeChild(resumeText);
+					pauseButton.appendChild(pauseText);
+				}
+
+			});
+
+		return pauseButton;
+	}
+
+	static GetMusicSettingsButton(scene){
+
+			var musicSettingsButton = document.createElement("a");
+			UIGenerator.ConfigureMenuButton(musicSettingsButton);
+			
+			var buttonText = document.createTextNode("Music Settings");
+			musicSettingsButton.appendChild(buttonText);
+			
+			musicSettingsButton.addEventListener("click", 
+				function(){
+				
+					var popup = UIGenerator.CreateMusicSettingsPopup(
+						"Music Settings",
+						GAME_SETTINGS.getScreenHeight()/3,
+						GAME_SETTINGS.getScreenWidth()/4,
+						"assets/Smilies/confused.gif",
+						function(event){
+							console.log("Processing event...");
+							if(event.target.checked){
+								if(scene.bgMusicAudio.muted){
+									scene.bgMusicAudio.muted = false;
+								} else {
+									scene.bgMusicAudio.muted = true;
+								}
+								
+							} else {
+								if(scene.bgMusicAudio.muted){
+									scene.bgMusicAudio.muted = false;
+								} else {
+									scene.bgMusicAudio.muted = true;
+								}
+							
+							}
+						},
+						function(){
+							scene.isPaused = false;
+
+						});
+					scene.addToContainer(popup);
+					scene.isPaused = true;
+			});
+		return musicSettingsButton;
+	}
+
+	static GetCrosshairSettingsButton(scene){
+
+			var crosshairSettingsButton = document.createElement("a");
+			UIGenerator.ConfigureMenuButton(crosshairSettingsButton);
+			
+			var buttonText = document.createTextNode("Crosshair");
+			crosshairSettingsButton.appendChild(buttonText);
+			
+			crosshairSettingsButton.addEventListener("click", 
+				function(){
+				
+					var popup = UIGenerator.CreateCrosshairSettingsPopup(
+						"Crosshair Settings",
+						GAME_SETTINGS.getScreenHeight()/3,
+						GAME_SETTINGS.getScreenWidth()/4,
+						"assets/Smilies/confused.png",
+						function(event){
+							console.log("Processing event...");
+							console.log(event);
+							console.log(event.target.value);
+							var newAcceleration = event.target.value/10
+							scene.player.adjustAcceleration(newAcceleration);
+						},
+						function(){
+							scene.isPaused = false;
+
+						});
+					scene.addToContainer(popup);
+					scene.isPaused = true;
+			});
+
+			return crosshairSettingsButton;
+
+	}
+
+	static GetInstructionsButton(scene){
+
+			var instructionsButton = document.createElement("a");
+			UIGenerator.ConfigureMenuButton(instructionsButton);
+			
+			var buttonText = document.createTextNode("Instructions");
+			instructionsButton.appendChild(buttonText);
+			
+			instructionsButton.addEventListener("click", 
+				function(){
+				
+					var popup = UIGenerator.CreateInstructionsPopup(
+						"In order to move the targeting crosshair, use the up, down, left, and right arrows on your keypad.  When the crosshair is over an enemy, tap the spacebar to fire a missile at the enemy.",
+						GAME_SETTINGS.getScreenHeight()/3,
+						GAME_SETTINGS.getScreenWidth()/4,
+						"assets/Smilies/confused.png",
+						function(){
+							scene.isPaused = false;
+
+						});
+					scene.addToContainer(popup);
+					scene.isPaused = true;
+			});
+
+			return instructionsButton;
+	}
+
+	static GetReturnHomeButton(linkPath){
+		var returnHomeButton = document.createElement("a");
+			UIGenerator.ConfigureMenuButton(returnHomeButton);
+			var buttonText = document.createTextNode("Return Home");
+			returnHomeButton.appendChild(buttonText);
+			
+			returnHomeButton.addEventListener("click", 
+				function(){
+					location.assign(linkPath);			
+				});
+		return returnHomeButton;
+	}
+
 	static CreateInstructionsPopup(messageTxt, top, left, imgSrc, removeCallback = null){
 			var message = document.createElement("p");
 
@@ -143,13 +303,13 @@ class UIGenerator{
 		canvas.style.zIndex = 0;
 	}
 
-	static ConfigureMenuButton(button,topDistance){
+	static ConfigureMenuButton(button){
 
-			button.style.position = "absolute";
-			button.style.top = topDistance;
-			button.style.right = "10%";
-			button.style.width = 250 + "px";
-			button.style.height = 30 + "px";
+			button.style.position = "relative";
+			button.style.display = "block";
+			button.style.clear = "both";
+			button.style.width = "100%";
+			button.style.height = "10%";
 			button.style.textAlign = "center";
 			button.style.backgroundImage = "url(assets/Banners/bannerModern.png)";
 			button.style.backgroundRepeat = 'no-repeat';

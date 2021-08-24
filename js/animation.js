@@ -1,6 +1,16 @@
  
  class Animation{
 
+     static GetTappyPlaneTextureImgPaths(color = "Blue"){
+         var basePath = "assets/Planes/plane" + color;
+         var imgPaths = [];
+         for(var i = 1; i < 4; i++){
+             var fullPath = basePath + i + ".png";
+             imgPaths.push(fullPath);
+         }
+         return imgPaths;
+     }
+
      static GetEvilSunTextureImgPaths(){
          var basePath = "assets/Sun/sun";
          var imgPaths = [];
@@ -10,6 +20,7 @@
          }
          return imgPaths;
      }
+
      static GetWingmanTextureImgPaths(){
          var basePath = "assets/Wingman/wingMan";
          var imgPaths = [];
@@ -46,6 +57,11 @@
          
             return imgArray;
 
+     }
+
+     static GetTappyPlaneTextures(color){
+         var imgPaths = Animation.GetTappyPlaneTextureImgPaths(color);
+         return Animation.GetTextures(imgPaths);
      }
 
     static GetEvilSunTextures(){

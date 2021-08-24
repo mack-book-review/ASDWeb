@@ -21,9 +21,13 @@ class SpriteGenerator{
 		generateUpdateHUDEvent(){
 			console.log("Generating sprite created event...");
 			const event = new CustomEvent('hudupdate',
-				{bubbles:true,
-					data:{totalSprites:this.totalSprites,
-						killCount:this.killCount}});
+				{	
+					bubbles:true,
+					detail:{
+						totalSprites:this.getTotalSprites(),
+						killCount:this.getKillCount()
+					}
+				});
 			this.canvas.dispatchEvent(event);
 		}
 

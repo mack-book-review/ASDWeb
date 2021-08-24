@@ -6,8 +6,6 @@ class BaseScene{
 
 			//Initialize Timer Variables
 			this.timer = 0;
-			this.timeRemaining = 60;
-			this.clockTime = 0;
 
 			//Initialize game states
 			this.isPaused = false;
@@ -25,11 +23,12 @@ class BaseScene{
 			this.createCanvasElement();
 			this.context = this.canvasElement.getContext('2d');
 			
+			
 	}
 
 
 
-
+		/** Helper functions for creating, configuring, and getting the canvas **/
 		createCanvasElement(){
 			this.canvasElement = document.createElement("canvas");
 			this.configureCanvasElement(this.canvasElement);
@@ -50,6 +49,16 @@ class BaseScene{
 			this.sprites.push(sprite);
 		}
 
+		getTimeLimit(){
+			return 60;
+		}
+
+		getTimeRemaining(){
+
+			var clockTime = Math.floor(this.timer / 1000);
+			return this.getTimeLimit() - clockTime;
+		}
+
 
 		//Run the game loop
 		runGame(){
@@ -62,38 +71,37 @@ class BaseScene{
 
 			/** Store references to the current game,
 			 * current context, canvas, etc. **/			
-			var currentGame = this;
+			var scene = this;
 			var context = this.context;
 			var canvas = this.canvasElement;
 	
 
 			this.gameLoopID = setInterval(function(){
-				if(currentGame.isPaused || currentGame.isLost || currentGame.isWon){
+				if(scene.isPaused || scene.isLost || scene.isWon){
 					return;
 				}
 
 				//Calculate time difference
 				timeDiff = lastTime - currentTime;
 				currentTime = lastTime;
-				currentGame.timer += timeDiff;
+				scene.timer += timeDiff;
 
 
-			
 				//Clear the canvas before drawing other game objects
 				context.clearRect(0,0,canvas.width,canvas.height);
 				
 				//Update physics, animation, HUD, etc.
-				currentGame.updatePhysics(timeDiff);
-				currentGame.updateAnimations(timeDiff);
+				scene.updatePhysics(timeDiff);
+				scene.updateAnimations(timeDiff);
 
-				currentGame.clockTime = Math.floor(currentGame.timer / 1000);
-				currentGame.timeRemaining = currentGame.levelConfiguration.timeLimit - currentGame.clockTime;
-				currentGame.drawText("Time Remaining: " + currentGame.timeRemaining,10,20);
+				//Draw the time remaing on the canvas
+				//currentGame.clockTime = Math.floor(currentGame.timer / 1000);
+				//currentGame.timeRemaining = currentGame.levelConfiguration.timeLimit - currentGame.clockTime;
+				scene.drawText("Time Remaining: " + scene.getTimeRemaining(),10,20);
 				
 
-
 				//Check if game win or loss conditions have been satisfied
-				currentGame.checkForGameWinOrLoss();
+				scene.checkForGameWinOrLoss();
 
 				//Reset the last time
 				lastTime = Date.now();
@@ -113,14 +121,17 @@ class BaseScene{
 		updateAnimations(timeDiff){
 
 			//Draw the background image
-			this.drawBackgroundImg();
+			this.drawBackgroundImage();
 
 
 		}
+
+
 		/** Helper Function for Drawing Background Image **/
-		drawBackgroundImg(){
+
+		drawBackgroundImage(path = GAME_SETTINGS.getBackgroundImgPath()){
 			var backgroundImg = new Image();
-			backgroundImg.src = GAME_SETTINGS.getBackgroundImgPath();
+			backgroundImg.src = path;
 
 			this.context.drawImage(
 				backgroundImg,
@@ -131,6 +142,7 @@ class BaseScene{
 				GAME_SETTINGS.screenWidth,
 				GAME_SETTINGS.screenHeight
 				);
+
 		}
 
 			
@@ -172,13 +184,11 @@ class BaseScene{
 
 		/** Trigger Custom Events for Game Win or Game Loss **/
 		generateGameWinEvent(){
-			console.log("Generating game win event...");
 			const event = new CustomEvent('gamewon',{bubbles:true});
 			this.canvasElement.dispatchEvent(event);
 		}
 
 		generateGameLossEvent(){
-			console.log("Generating game loss event...");
 			const event = new CustomEvent('gamelost',{bubbles:true});
 			this.canvasElement.dispatchEvent(event);
 		}

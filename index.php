@@ -19,6 +19,15 @@ font-family: 'Sigmar One', cursive;
 
 */
 
+	#start-game-button{
+		background-color: tomato;
+		border-radius: 10%;
+		border:  solid 2px black;
+		color:  white;
+		padding:  20px;
+		cursor: pointer;
+	}
+
 	#game-container{
 		width:  90%;
 		height:  40em;
@@ -37,7 +46,6 @@ font-family: 'Sigmar One', cursive;
 <script src="js/imageloader.js"></script>
 <script src="js/gamesettings.js"></script>
 <script src="js/global_constants.js"></script>
-
 <script src="js/uigenerator.js"></script>
 <script src="js/animation.js"></script>
 <script src="js/position.js"></script>
@@ -58,21 +66,20 @@ font-family: 'Sigmar One', cursive;
 <script src="js/inputhelper.js"></script>
 <script src="js/levelconfiguration.js"></script>
 <script src="js/levelloader.js"></script>
+<script src="js/plane.js"></script>
 <script src="js/basescene.js"></script>
 <script src="js/scene.js"></script>
+<script src="js/tpscene.js"></script>
 <script src="js/game.js"></script>
 <script type = "text/javascript" charset = "utf-8">
 
             // This function will be called once the page loads completely
 
-            function pageLoaded(){
-
-				var gameContainer = document.getElementById("game-container");
-
+            function loadGame(container_id){
 
 				//Declare the global game settings as a constant
 				var scene = new Scene();
-				var game = new Game(scene, gameContainer);
+				var game = new Game(scene, container_id);
 
 
 				game.startGame();
@@ -82,12 +89,19 @@ font-family: 'Sigmar One', cursive;
 
         </script>
     </head>
-    <body onload = "pageLoaded();">
+    <body>
 
     	<div id="game-container">
 
     	</div>
+    	<a id="start-game-button">Start Game</a>
 
+    	<script type="text/javascript">
+    		var button = document.getElementById("start-game-button");
+    		button.addEventListener("click", function(){
+    			loadGame("game-container");
+    		});
+    	</script>
 
     </body>
 

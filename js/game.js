@@ -1,13 +1,13 @@
 
 	class Game{
 
-		constructor(scene, container){
+		constructor(scene, container_id){
 
 			//Store reference to scene
 			this.scene = scene;
 			
 			//Store a reference to the container
-			this.container = container;
+			this.container = document.getElementById(container_id);
 			this.configureContainerEventListeners();
 
 			//Create the canva
@@ -17,16 +17,12 @@
 			this.setupBGMusic();
 
 			//Create UI elements
-			this.createPauseButton();
-			this.createInstructionsButton();
-			this.createMusicSettingsButton();
-			this.createCrosshairSettingsButton();
+			this.createMenuPanel();
+			this.configureMenuPanel();
 			this.createTitleBanner();
-			this.createHomeReturnButton();
 
 			//Create the HUD
 			this.createHUD();
-
 
 		}
 
@@ -65,9 +61,11 @@
 			});
 
 
-			this.container.addEventListener("hudupdate", function(){
-
-				currentGame.updateHUD();
+			this.container.addEventListener("hudupdate", function(event){
+				console.log(event);
+				var sprites = event.detail.totalSprites;
+				var kills = event.detail.killCount;
+				currentGame.updateHUD(sprites,kills);
 
 			});
 
@@ -87,6 +85,15 @@
 		}
 
 
+		createMenuPanel(){
+			this.menuPanel = UIGenerator.GetMenuPanel(this);
+			this.addToContainer(this.menuPanel);
+		}
+
+		addToMenuPanel(element){
+			this.menuPanel.appendChild(element);
+		}
+
 		createTitleBanner(){
 			this.titleBannerText = "Current Level: " + this.scene.levelConfiguration.levelNumber;
 			this.titleElement = UIGenerator.CreateTitleBanner(this.titleBannerText);
@@ -100,177 +107,21 @@
 				this.addToContainer(this.titleElement);
 		}
 
-		createHomeReturnButton(){
-			var currentGame = this;
+		configureMenuPanel(){
+			var returnHomeButton = UIGenerator.GetReturnHomeButton('https://suzhoupanda.github.io');
+			var instructionsButton = UIGenerator.GetInstructionsButton(this);
+			var crosshairSettingsButton = UIGenerator.GetCrosshairSettingsButton(this);
+			var button = UIGenerator.GetMusicSettingsButton(this);
+			var pauseButton = UIGenerator.GetPauseButton(this);
 
-			this.returnHomeButton = document.createElement("a");
-			UIGenerator.ConfigureMenuButton(this.returnHomeButton,"50%");
-			var buttonText = document.createTextNode("Return Home");
-			this.returnHomeButton.appendChild(buttonText);
-			
-			var returnHomeButton = this.returnHomeButton;
-			this.returnHomeButton.addEventListener("click", 
-				function(){
-					location.assign('https://suzhoupanda.github.io');			});
-
-			this.addToContainer(this.returnHomeButton);
+			this.addToMenuPanel(pauseButton);
+			this.addToMenuPanel(button);
+			this.addToMenuPanel(crosshairSettingsButton);
+			this.addToMenuPanel(instructionsButton);
+			this.addToMenuPanel(returnHomeButton);
 
 		}
-
-		createInstructionsButton(){
-			var currentGame = this;
-
-			this.instructionsButton = document.createElement("a");
-			UIGenerator.ConfigureMenuButton(this.instructionsButton,"20%");
-			var buttonText = document.createTextNode("Instructions");
-			this.instructionsButton.appendChild(buttonText);
-			
-			var instructionsButton = this.instructionsButton;
-			this.instructionsButton.addEventListener("click", 
-				function(){
-				
-					var popup = UIGenerator.CreateInstructionsPopup(
-						"In order to move the targeting crosshair, use the up, down, left, and right arrows on your keypad.  When the crosshair is over an enemy, tap the spacebar to fire a missile at the enemy.",
-						GAME_SETTINGS.getScreenHeight()/3,
-						GAME_SETTINGS.getScreenWidth()/4,
-						"assets/Smilies/confused.png",
-						function(){
-							currentGame.isPaused = false;
-
-						});
-					currentGame.addToContainer(popup);
-					currentGame.isPaused = true;
-			});
-
-			this.addToContainer(this.instructionsButton);
-
-		}
-
-		createCrosshairSettingsButton(){
-
-			var currentGame = this;
-
-			this.crosshairSettingsButton = document.createElement("a");
-			UIGenerator.ConfigureMenuButton(this.crosshairSettingsButton,"40%");
-			
-			var buttonText = document.createTextNode("Crosshair");
-			this.crosshairSettingsButton.appendChild(buttonText);
-			
-			var crosshairSettingsButton = this.crosshairSettingsButton;
-			var player = this.player;
-			this.crosshairSettingsButton.addEventListener("click", 
-				function(){
-				
-					var popup = UIGenerator.CreateCrosshairSettingsPopup(
-						"Crosshair Settings",
-						GAME_SETTINGS.getScreenHeight()/3,
-						GAME_SETTINGS.getScreenWidth()/4,
-						"assets/Smilies/confused.png",
-						function(event){
-							console.log("Processing event...");
-							console.log(event);
-							console.log(event.target.value);
-							var newAcceleration = event.target.value/10
-							player.adjustAcceleration(newAcceleration);
-						},
-						function(){
-							currentGame.isPaused = false;
-
-						});
-					currentGame.addToContainer(popup);
-					currentGame.isPaused = true;
-			});
-
-			this.addToContainer(this.crosshairSettingsButton);
-
-
-		}
-
-		createMusicSettingsButton(){
-			var currentGame = this;
-
-			this.musicSettingsButton = document.createElement("a");
-			UIGenerator.ConfigureMenuButton(this.musicSettingsButton,"30%");
-			var buttonText = document.createTextNode("Music Settings");
-			this.musicSettingsButton.appendChild(buttonText);
-			
-			var musicSettingsButton = this.musicSettingsButton;
-			var bgMusicAudio = this.bgMusicAudio;
-			this.musicSettingsButton.addEventListener("click", 
-				function(){
-				
-					var popup = UIGenerator.CreateMusicSettingsPopup(
-						"Music Settings",
-						GAME_SETTINGS.getScreenHeight()/3,
-						GAME_SETTINGS.getScreenWidth()/4,
-						"assets/Smilies/confused.gif",
-						function(event){
-							console.log("Processing event...");
-							if(event.target.checked){
-								if(bgMusicAudio.muted){
-									bgMusicAudio.muted = false;
-								} else {
-									bgMusicAudio.muted = true;
-								}
-								
-							} else {
-								if(bgMusicAudio.muted){
-									bgMusicAudio.muted = false;
-								} else {
-									bgMusicAudio.muted = true;
-								}
-							
-							}
-						},
-						function(){
-							currentGame.isPaused = false;
-
-						});
-					currentGame.addToContainer(popup);
-					currentGame.isPaused = true;
-			});
-
-			this.addToContainer(this.musicSettingsButton);
-
-		}
-
-		createPauseButton(){
-			var currentGame = this;
-
-			this.pauseButton = document.createElement("a");
-			this.configureMenuButton(this.pauseButton,"10%");
-
-
-			var pauseText = document.createTextNode("Pause Game");
-			var resumeText = document.createTextNode("Restart Game");
-			this.pauseButton.appendChild(pauseText);
-			var pauseButton = this.pauseButton;
-			this.pauseButton.addEventListener("click", 
-				function(){
-				if(!this.isPaused){
-					currentGame.pauseGame();
-					this.isPaused = true;
-					pauseButton.removeChild(pauseText);
-					pauseButton.appendChild(resumeText);
-				} else {
-					currentGame.startGame();
-					this.isPaused = false;
-					pauseButton.removeChild(resumeText);
-					pauseButton.appendChild(pauseText);
-				}
-
-			});
-
-			this.addToContainer(this.pauseButton);
-
-		}
-
-		configureMenuButton(button,topDistance){
-			UIGenerator.ConfigureMenuButton(button,topDistance);
 		
-		}
-
-	
 
 		/** Helper methods for creating and configuring background music **/
 		setupBGMusic(){
@@ -290,8 +141,6 @@
     		});
 		}
 
-
-
 		/** HUD-related Helper Functions **/
 		createHUD(){
 		
@@ -301,42 +150,13 @@
 		}
 
 
-		getTotalEnemies(){
-			var totalEnemies = 0;
-
-			this.scene.spriteGenerators.forEach(function(spriteGenerator){
-				totalEnemies += spriteGenerator.getTotalSprites();
-				
-			});
-
-			return totalEnemies;
-		}
-
-		updateHUDSpriteCount(){
-
-			this.hud.updateEnemyCount(this.getTotalEnemies());
-		}
-
-		updateHUDKillCount(){
-			var totalKills = 0;
-
-			this.scene.spriteGenerators.forEach(function(spriteGenerator){
-				totalKills += spriteGenerator.getKillCount();
-			});
-
+		updateHUD(totalSprites,totalKills){
+			this.hud.updateEnemyCount(totalSprites);
 			this.hud.updateKillCount(totalKills);
-		}
-
-
-		updateHUD(){
-			this.updateHUDSpriteCount();
-			this.updateHUDKillCount();
-
 			this.hud.updateHUD();
 		}
 
 		
-	
 		//Run the game loop
 		runGame(){
 			this.scene.runGame();
