@@ -129,17 +129,14 @@
 			this.bgMusicAudio = new Audio(); 
 			this.bgMusicAudio.src = "assets/Sounds/polka_train.ogg";
 			this.addToContainer(this.bgMusicAudio);
-			this.loadBackgroundMusic();
-		}
-
-		loadBackgroundMusic(){
-
-			var bgMusicAudio = this.bgMusicAudio;
+	
 			this.container.addEventListener("mousemove", function () {
     			bgMusicAudio.play();
 
     		});
 		}
+
+		
 
 		/** HUD-related Helper Functions **/
 		createHUD(){
