@@ -110,7 +110,7 @@
 		}
 
 		configureMenuPanel(){
-			var returnHomeButton = UIGenerator.GetReturnHomeButton('https://suzhoupanda.github.io');
+			var returnHomeButton = UIGenerator.GetReturnHomeButton('https://wordpress-648454-2114331.cloudwaysapps.com/elementor-623/');
 			var instructionsButton = UIGenerator.GetInstructionsButton(this);
 			var crosshairSettingsButton = UIGenerator.GetCrosshairSettingsButton(this);
 			var button = UIGenerator.GetMusicSettingsButton(this);

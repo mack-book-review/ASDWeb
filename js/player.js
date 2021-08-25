@@ -1,8 +1,8 @@
 class Player extends Sprite{
 		
-		constructor(x = undefined,y = undefined, canvas = undefined){
+		constructor(x = undefined,y = undefined){
 			super("assets/BasicCrosshairs/White/crosshair061.png",
-				x,y,40,40,canvas);
+				x,y,40,40);
 			this.velocityX = 0;
 			this.velocityY = 0;
 			this.timeCounter = 0;
@@ -23,7 +23,7 @@ class Player extends Sprite{
 		}
 
 		keyRight(){
-			if(this.x > this.screenWidth - this.width){
+			if(this.x > GAME_SETTINGS.screenWidth - this.width){
 				return;
 			}
 
@@ -39,7 +39,7 @@ class Player extends Sprite{
 		}
 
 		keyDown(){
-			if(this.y > this.screenHeight - this.height){
+			if(this.y > GAME_SETTINGS.screenHeight  - this.height){
 				return;
 			}
 
@@ -55,7 +55,7 @@ class Player extends Sprite{
 				this.velocityX = 1;
 			}
 
-			if(this.x > this.canvas.width - this.width){
+			if(this.x > GAME_SETTINGS.screenWidth*0.41 - this.width){
 				this.velocityX = -1;
 			}
 
@@ -63,7 +63,7 @@ class Player extends Sprite{
 				this.velocityY = 1;
 			}
 
-			if(this.y > this.canvas.height - this.height){
+			if(this.y > GAME_SETTINGS.screenHeight*0.36 - this.height){
 				this.velocityY = -1;
 			}
 			

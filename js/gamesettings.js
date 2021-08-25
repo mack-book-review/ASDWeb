@@ -1,8 +1,11 @@
 class GameSettings{
 
-	static DefaultScreenWidth = 640;
-	static DefaultScreenHeight = 480;
+	static DefaultScreenWidth = 740;
+	static DefaultScreenHeight = 420;
 	static DefaultFrameRate = 20;
+
+	static WidthAdjustmentFactor = 0.41;
+	static HeightAdjustmentFactor = 0.36;
 
 	static LoadDefaultGameSettings(){
 		return new GameSettings();

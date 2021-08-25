@@ -19,7 +19,6 @@ class SpriteGenerator{
 
 		
 		generateUpdateHUDEvent(){
-			console.log("Generating sprite created event...");
 			const event = new CustomEvent('hudupdate',
 				{	
 					bubbles:true,
@@ -76,7 +75,7 @@ class SpriteGenerator{
 		var sprite = new Sprite(
 			this.getDefaultImgPath(),
 			spawnPoint[0],spawnPoint[1],
-			defaultSize[0],defaultSize[1],this.canvas
+			defaultSize[0],defaultSize[1]
 			);
 
 		

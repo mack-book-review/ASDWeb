@@ -32,8 +32,9 @@ class BaseScene{
 
 		/** Helper functions for creating, configuring, and getting the canvas **/
 		createCanvasElement(){
+			console.log("Base Scene:  Configuring canvas element");
 			this.canvasElement = document.createElement("canvas");
-			this.configureCanvasElement(this.canvasElement);
+			UIGenerator.ConfigureCanvas(this.canvasElement);
 	
 		}
 

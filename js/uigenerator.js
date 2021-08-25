@@ -294,15 +294,15 @@ class UIGenerator{
 	}
 
 	static ConfigureCanvas(canvas){
+		console.log("UIGenerator:  Configuring canvas element");
 
-		canvas.style.width = GAME_SETTINGS.getScreenWidth() + "px";
-		canvas.style.height = GAME_SETTINGS.getScreenHeight() + "px";
+		canvas.style.width = GAME_SETTINGS.screenWidth + "px";
+		canvas.style.height = GAME_SETTINGS.screenHeight + "px";
 		canvas.style.border = "white 1px solid";
 		canvas.style.backgroundColor = "white";
 		canvas.style.position = "absolute";
 		canvas.style.top = "10%";
 		canvas.style.left = "10%";
-		canvas.style.zIndex = 0;
 	}
 
 	static ConfigureMenuButton(button){

@@ -4,33 +4,30 @@ class Sprite{
 			x = undefined,
 			y = undefined,
 			width = undefined,
-			height = undefined, canvas = undefined){
+			height = undefined){
 
 			//Configure reference to image
-			this.img =  new Image();//IMAGE_LOADER.cloneImage(imgSrc);
+			this.img =  new Image();
 			this.img.src = imgSrc;
 
 			//Configure current animation
 			this.currentAnimation = null;
-			
-			//Configure Physics Body
-			this.body = null;
 
-			//Configure position and size
-			this.x = x ?? 0;
-			this.y = y ?? 0;
+			/**Configure position and size
+			* Use GAME_SETTINGS singleton to get default start
+			* position for the player
+			* */
+			var pos = GAME_SETTINGS.getPlayerStartPosition();
+			this.x = x ?? pos[0];
+			this.y = y ?? pos[1];
 			this.width = width ?? this.img.naturalWidth;
 			this.height = height ?? this.img.naturalHeight;
 			
-			//Configure health and living status
+			//Configure health and dead/alive status
 			this.health = 2;
 			this.isDead = false;
 
-			//Store reference to canvas and derivative properties, such as screenWidth and screenHeight
-			this.canvas = canvas;
-			this.screenWidth = 640;//this.canvas.width;
-			this.screenHeight = 480;//this.canvas.height;
-
+			
 			;
 
 		}
@@ -47,25 +44,7 @@ class Sprite{
 					);
 		}
 
-		// //Refactor later to get bounds from canvas element
-		// IsInHorizontalBounds(screenWidth){
-		// 	console.log("x is: " + this.x);
-		// 	return this.x >= 0  && this.x <= screenWidth;
-		// }
-
-		// IsInVerticalBounds(screenHeight){
-		// 	console.log("y is: " + this.y);
-		// 	return this.y >= 0 && this.y <= screenHeight;
-
-		// }
-
-		// isClicked(xCor,yCor){
-		// 	var containsX = xCor > this.x && xCor < (this.x + this.width);
-		// 	var containsY = yCor > this.y && yCor < (this.y + this.height);
-			
-		// 	return containsX && containsY;
-		// }
-
+		
 
 
 		get boundingRectangle(){
@@ -129,33 +108,24 @@ class Sprite{
 
 
 		
-		checkPosition(callback = null){
+		checkPosition(){
 
 				if(this.x < 0){
-
 					this.velocityX = 5;
 				}
 
 
-				if(this.x > this.canvas.width-this.width){
-
+				if(this.x > GAME_SETTINGS.screenWidth*0.41 -this.width){
 					this.velocityX = -5;
 				}
 
 
 				if(this.y < 0){
-
-
 					this.velocityY = 5;
 				}
 
-				if(this.y > this.canvas.height - this.height){
-
+				if(this.y > GAME_SETTINGS.screenHeight*0.36 - this.height){
 					this.velocityY = -5;
-				}
-
-				if(typeof(callback) == "function"){
-					callback();
 				}
 
 
@@ -218,7 +188,8 @@ class Sprite{
 						context.drawImage(
 							currentTexture,
 							0,0,
-							currentTexture.naturalWidth,currentTexture.naturalHeight, 
+							currentTexture.naturalWidth,
+							currentTexture.naturalHeight, 
 							this.x,this.y,
 							this.width,this.height);
 
