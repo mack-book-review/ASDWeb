@@ -12,9 +12,9 @@ class UIGenerator{
 
 	static GetMenuPanel(scene){
 		var menuPanel = document.createElement('div');
-		menuPanel.style.position =  "relative";
-		menuPanel.style.top =  "40px";
-		menuPanel.style.left =  "700px";
+		menuPanel.style.position =  "absolute";
+		menuPanel.style.top = "5%";
+		menuPanel.style.left =  GAME_SETTINGS.screenWidth*1.2 + "px";
 		menuPanel.style.width =  "300px";
 		menuPanel.style.height = "500px";
 
@@ -92,6 +92,49 @@ class UIGenerator{
 					scene.isPaused = true;
 			});
 		return musicSettingsButton;
+	}
+
+	static GetInputControlsButton(game){
+
+			var button = document.createElement("a");
+			UIGenerator.ConfigureMenuButton(button);
+			
+			var buttonText = document.createTextNode("Input Controls");
+			button.appendChild(buttonText);
+			
+			button.addEventListener("click", 
+				function(){
+				
+					var popup = UIGenerator.CreateControlSettingsPopupPopup(
+						"Control Settings",
+						GAME_SETTINGS.getScreenHeight()/3,
+						GAME_SETTINGS.getScreenWidth()/4,
+						"assets/Smilies/confused.png",
+						function(event){
+	
+							var controlType = event.target.value;
+
+							if(controlType == "KeyStroke"){
+								InputHelper.RemoveMouseControlListeners(game.scene);
+								InputHelper.ConfigureCanvasKeyboardControls(game.scene);
+							} 
+
+							if(controlType == "MouseClick"){
+								InputHelper.RemoveKeystrokeListeners(game.scene);
+								InputHelper.ConfigureCanvasMouseControls(game.scene);
+
+							}
+						},
+						function(){
+							game.scene.isPaused = false;
+
+						});
+					game.addToContainer(popup);
+					game.scene.isPaused = true;
+			});
+
+			return button;
+
 	}
 
 	static GetCrosshairSettingsButton(scene){
@@ -269,19 +312,23 @@ class UIGenerator{
 			return message;
 	}
 
-	static CreateTitleBanner(text,backgroundImgSrc = "/assets/Banners/bannerScroll.png"){
+	static CreateTitleBanner(text,backgroundImgSrc = "./assets/Banners/bannerScroll.png"){
 			var title = document.createElement("p");
 
-			title.style.backgroundImage = 'url('+ backgroundImgSrc + ')';
-			title.style.backgroundRepeat = 'no-repeat';
+			//title.style.backgroundImage = 'url('+ backgroundImgSrc + ')';
+			//title.style.backgroundRepeat = 'no-repeat';
 
+			title.style.backgroundColor = 'tomato';
 			title.style.position = 'absolute';
 			title.style.display = 'block';
 			title.style.textAlign = 'center';
 			title.style.width = '250px';
-			title.style.height = '50px';
-			title.style.padding = "10px";
-			title.style.paddingTop = '20px';
+			title.style.height = '20px';
+			title.style.padding = "3px";
+			title.style.paddingTop = '8px';
+			title.style.paddingBottom = '8px';
+
+			title.style.border = "solid 2px white";
 			title.style.fontFamily = UIGenerator.Fonts.Bangers;
 			title.style.color = "white";
 			title.style.fontSize = "1.2em";
@@ -411,6 +458,84 @@ class UIGenerator{
 			
 			form.appendChild(input);
 			form.appendChild(label);
+
+			var removeButton = UIGenerator.CreateRemoveButton("Done");
+
+			removeButton.addEventListener("click", function(){
+
+				
+				message.remove();
+
+				if(typeof(removeCallback) == "function"){
+					removeCallback();
+				}
+			});
+
+			message.appendChild(form);
+
+			var breakElement = document.createElement("br");
+	
+			message.appendChild(breakElement);
+			message.appendChild(removeButton);
+
+			return message;
+	}
+
+
+	static CreateControlSettingsPopupPopup(titleText, 
+		top, left, imgSrc, 
+		radioSelectionCallback = null, removeCallback = null){
+			var message = document.createElement("p");
+			UIGenerator.ConfigureMessageBox(message,titleText,top,left,500,250);
+
+			var img = UIGenerator.CreateImgElement("assets/Smilies/annoyed.png");
+			message.appendChild(img);
+
+			var form = document.createElement("form");
+			form.classList.add("form-check-input");
+			form.style.clear = "left";
+
+			var input1 = document.createElement("input");
+			input1.setAttribute("type", "radio");
+			input1.setAttribute("value", "MouseClick");
+			input1.setAttribute("id", "MouseClick");
+			input1.setAttribute("name", "ControlType");
+
+			input1.addEventListener("change",function(event){
+				console.log(event);
+				radioSelectionCallback(event);
+			});
+
+			var label1 = document.createElement("label");
+			label1.classList.add("form-check-label");
+			label1.setAttribute("for", "MouseClick");
+			
+			label1.appendChild(document.createTextNode("Mouse Control"));
+			
+
+			var input2 = document.createElement("input");
+			input2.setAttribute("type", "radio");
+			input2.setAttribute("value", "KeyStroke");
+			input2.setAttribute("id", "KeyStroke");
+			input2.setAttribute("name", "ControlType");
+
+			input2.addEventListener("change",function(event){
+				console.log(event);
+				radioSelectionCallback(event);
+			});
+
+			var label2 = document.createElement("label");
+			label2.classList.add("form-check-label");
+			label2.setAttribute("for", "KeyStroke");
+			
+			label2.appendChild(document.createTextNode("Keypad Control"));
+			
+
+			form.appendChild(input1);
+			form.appendChild(label1);
+			form.appendChild(document.createElement("br"));
+			form.appendChild(input2);
+			form.appendChild(label2);
 
 			var removeButton = UIGenerator.CreateRemoveButton("Done");
 

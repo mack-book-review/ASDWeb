@@ -33,15 +33,17 @@
 			});
 
 			//Configure the event handler that is called when the player shoots
+			this.numberBullets = 60;
 			this.configurePlayerShootHandler();
 	
 			
 			//Create a way for player to interact with game
-			InputHelper.ConfigureCanvasKeyboardControls(this);
-			
+			//InputHelper.ConfigureCanvasKeyboardControls(this);
+			InputHelper.CurrentScene = this;
+			InputHelper.ConfigureLaserControl(this);
+			InputHelper.ConfigureCanvasMouseControls(this);
 
 		}
-
 
 		
 
@@ -85,19 +87,29 @@
 
 		}
 
+		generatePlayerUpdateEvent(){
+			const event = new CustomEvent('playerupdate',
+				{	
+					bubbles:true,
+					detail:{
+						health:this.player.health,
+						numberBullets:this.player.numberBullets
+					}
+				});
+			this.canvasElement.dispatchEvent(event);
+		}
+
+		
+
 		configurePlayerShootHandler(){
 			//Get references to enemy generators for playerShoot handler
-			var spriteGenerators = this.spriteGenerators;
-			var player = this.player;
-
-			var shootAudio = this.shootAudio;
-			
+			var scene = this;
 			this.playerShootHandler = function(){
+				scene.player.reduceNumberOfBullets();
+				scene.shootAudio.play();
+				scene.spriteGenerators.forEach(function(spriteGenerator){
 
-				shootAudio.play();
-				spriteGenerators.forEach(function(spriteGenerator){
-
-					spriteGenerator.checkPlayerContact(player);
+					spriteGenerator.checkPlayerContact(scene.player);
 				});
 				
 			};
@@ -151,6 +163,7 @@
 		updateAnimations(timeDiff){
 			super.updateAnimations(timeDiff);
 
+			this.generatePlayerUpdateEvent();
 
 			this.spriteGenerators.forEach(function(spriteGenerator){
 
@@ -171,7 +184,7 @@
 		}
 
 		hasLostGame(){
-			return this.timeRemaining == 0;
+			return this.timeRemaining == 0 || this.player.numberBullets == 0;
 		}
 
 

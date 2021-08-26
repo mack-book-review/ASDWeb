@@ -41,42 +41,82 @@ class InputHelper{
 			
 		}
 
+	static CurrentScene = null;
 
-	static ConfigureCanvasKeyboardControls(scene){
+	static MouseClickHandler = function(event){
+				event.preventDefault();
+				console.log(event);
+				var x = event.offsetX;
+				var y = event.offsetY;
+				var scalingFactor = 3.8;
+				InputHelper.CurrentScene.player.processClick(x,y,scalingFactor);
+				
+			};
 
-			
-			document.addEventListener('keydown',event =>{
+
+	static KeystrokeHandler = function(event){
 				console.log("Key was pressed");
 				
 				event.preventDefault();
 				//Down key
 				if(event.keyCode == 40) {
-						scene.player.keyDown();	
+						InputHelper.CurrentScene.player.keyDown();	
       			}
 
       			//Up key
       			if(event.keyCode == 38) {
-						scene.player.keyUp();
+						InputHelper.CurrentScene.player.keyUp();
       			}
 
       			//Left key
       			if(event.keyCode == 37) {
-						scene.player.keyLeft();     				       	
+						InputHelper.CurrentScene.player.keyLeft();     				       	
       			}
 
       			//Right key
       			if(event.keyCode == 39) {
-         				scene.player.keyRight();
+         				InputHelper.CurrentScene.player.keyRight();
       			}
 
-      			//Hit spacebar
-      			if(event.keyCode == 32) {
+      			
 
-      		
-         			scene.playerShootHandler();
-      			}
+			};
 
-			});
+	static ConfigureLaserControl(scene){
+
+		document.addEventListener('keydown',function(event){
+
+			event.preventDefault();
+			
+			if(event.keyCode == 32) {
+
+         		InputHelper.CurrentScene.playerShootHandler();
+      		}
+
+	});
+
+	
+
+	}
+
+	static RemoveMouseControlListeners(scene){
+		scene.canvasElement.removeEventListener("click",InputHelper.MouseClickHandler);
+	}
+
+	static RemoveKeystrokeListeners(scene){
+		document.removeEventListener('keydown',InputHelper.KeystrokeHandler);
+	}
+
+
+	static ConfigureCanvasMouseControls(scene){
+
+			scene.canvasElement.addEventListener("click", InputHelper.MouseClickHandler);
+	}
+
+	static ConfigureCanvasKeyboardControls(scene){
+
+			
+			document.addEventListener('keydown',InputHelper.KeystrokeHandler);
 
 			
 

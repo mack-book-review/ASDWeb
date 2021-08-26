@@ -7,6 +7,8 @@ class Player extends Sprite{
 			this.velocityY = 0;
 			this.timeCounter = 0;
 			this.acceleration = 0.3;
+			this.health = 10;
+			this.numberBullets = 60;
 		}	
 
 
@@ -14,7 +16,62 @@ class Player extends Sprite{
 			this.acceleration = acceleration;
 		}
 
+		processClick(x,y,scalingFactor = 1){
+
+			console.log("x: " + x);
+			console.log("y: " + y);
+			console.log("PosX: " + this.x);
+			console.log("PosY: " + this.y);
+
+			if(x < scalingFactor*(this.x + this.width)/2){
+				this.clickHandler("left");
+			}else{
+				this.clickHandler("right");
+			} 
+
+			if(y < scalingFactor*(this.y+this.height)/2){
+				this.clickHandler("up");
+			}else{
+				this.clickHandler("down");
+			}
+		}
+
+		clickHandler(direction){
+			switch(direction){
+				case "left": 
+					this.moveLeft();
+					break;
+				case "right": 
+					this.moveRight();
+					break;
+				case "up": 
+					this.moveUp();
+					break; 
+				case "down": 
+					this.moveDown();
+					break;
+			}
+		}
+
+	
+
 		keyLeft(){
+			this.moveLeft();
+		}
+
+		keyRight(){
+			this.moveRight();
+		}
+
+		keyUp(){
+			this.moveUp();
+		}
+
+		keyDown(){
+			this.moveDown();
+		}
+
+		moveLeft(){
 			if(this.x < 0){
 				return;
 			}
@@ -22,7 +79,7 @@ class Player extends Sprite{
 			this.velocityX += -this.acceleration;
 		}
 
-		keyRight(){
+		moveRight(){
 			if(this.x > GAME_SETTINGS.screenWidth - this.width){
 				return;
 			}
@@ -30,7 +87,7 @@ class Player extends Sprite{
 			this.velocityX += this.acceleration;
 		}
 
-		keyUp(){
+		moveUp(){
 			if(this.y < 0){
 				return;
 			}
@@ -38,13 +95,19 @@ class Player extends Sprite{
 			this.velocityY += -this.acceleration;
 		}
 
-		keyDown(){
+		moveDown(){
 			if(this.y > GAME_SETTINGS.screenHeight  - this.height){
 				return;
 			}
 
 			this.velocityY += this.acceleration;
 		}
+
+		reduceNumberOfBullets(){
+			this.numberBullets -= 1;
+		}
+
+		
 
 	
 		

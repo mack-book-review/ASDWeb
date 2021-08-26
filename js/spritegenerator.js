@@ -18,7 +18,7 @@ class SpriteGenerator{
 	/** Trigger artificial events **/
 
 		
-		generateUpdateHUDEvent(){
+	generateUpdateHUDEvent(){
 			const event = new CustomEvent('hudupdate',
 				{	
 					bubbles:true,

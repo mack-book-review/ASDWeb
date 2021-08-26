@@ -14,6 +14,8 @@ class HUD{
 		this.playerHealth = 10;
 		this.totalEnemies = 0;
 		this.killCount = 0;
+		this.health = 0;
+		this.numberBullets = 0;
 
 		//Create HUD UI elements
 		this.createHUD();
@@ -37,6 +39,14 @@ class HUD{
 		this.totalEnemies = enemyCount;
 	}
 
+	updateHealth(health){
+		this.health = health
+	};
+	
+	updateNumberOfBullets(numberBullets){
+		this.numberBullets = numberBullets;
+	};
+
 	//Primary method for updating the HUD
 	updateHUD(){
 		this.removeTextNode();
@@ -57,6 +67,7 @@ class HUD{
 	getHUDText(){
 		var text = "Total Enemies: " + this.totalEnemies;
 		text += "  /  Kill Count: " + this.killCount;
+		text += " / Number Bullets: " + this.numberBullets;
 		return text;
 	}
 
@@ -75,8 +86,9 @@ class HUD{
 		hud.style.position = 'absolute';
 		hud.style.display = 'block';
 		hud.style.textAlign = 'center';
-		hud.style.width =  GAME_SETTINGS.screenWidth*0.7 + 'px';
-		hud.style.height = GAME_SETTINGS.screenWidth*0.05 +'px';
+
+		hud.style.width =  GAME_SETTINGS.screenWidth*0.5 + 'px';
+		hud.style.height = GAME_SETTINGS.screenHeight*0.05 +'px';
 		hud.style.padding = "5px";
 		hud.style.paddingTop = '20px';
 		hud.style.fontFamily = UIGenerator.Fonts.Bangers;
@@ -99,8 +111,8 @@ class HUD{
 
 			this.configureHUD(this.hud);
 
-			this.hud.style.bottom = '0%';
-			this.hud.style.left = '20%';
+			this.hud.style.left = '10%';
+			this.hud.style.top = GAME_SETTINGS.screenHeight + "px";
 
 			this.createTextNode();
 			this.addTextNode();

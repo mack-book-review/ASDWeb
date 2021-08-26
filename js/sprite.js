@@ -6,7 +6,7 @@ class Sprite{
 			width = undefined,
 			height = undefined){
 
-			//Configure reference to image
+			//Configure image used for sprite
 			this.img =  new Image();
 			this.img.src = imgSrc;
 
@@ -24,7 +24,7 @@ class Sprite{
 			this.height = height ?? this.img.naturalHeight;
 			
 			//Configure health and dead/alive status
-			this.health = 2;
+			this.health = 1;
 			this.isDead = false;
 
 			
@@ -91,8 +91,6 @@ class Sprite{
 				return;
 			}
 
-			console.log("Take damage");
-			this.img.style.opacity -= 0.2;
 			if(this.health > 0){
 				this.health -= 1;
 			} else {
@@ -148,23 +146,10 @@ class Sprite{
 		
 		}
 
-		/** MOVEMENT PATTERNS **/
 
-		moveRandomly(timeDiff){
-			this.timer += timeDiff;
-			if(this.timer > 150){
-				this.randomizeVelocity();
-
-
-				this.x += this.velocityX;
-				this.y += this.velocityY;
-				this.timer = 0;
-			}
-		}
 
 		drawImage(context,timeDiff){
 			
-
 
 			if(this.currentAnimation == null){
 

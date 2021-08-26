@@ -1,10 +1,10 @@
 class BaseScene{
 
 	constructor(){
-		//Initialize Game :oop ID
+			//Initialize game loop ID
 			this.gameLoopID = 0;
 
-			//Initialize Timer Variables
+			//Initialize timer variables
 			this.timer = 0;
 			this.clockTime = 0;
 			this.timeRemaing = 60;
@@ -14,14 +14,10 @@ class BaseScene{
 			this.isLost = false;
 			this.isWon = false;
 
-			//Initialize current background animation
-			this.currrenbackgroundAnimation = null;
-
 			//Initialize game sprites array
 			this.sprites = [];
 
 			//Instantiate the canvas before instantiating the player and other sprites
-			//Sprites will require a reference to the canvas on which they are drawn
 			this.createCanvasElement();
 			this.context = this.canvasElement.getContext('2d');
 			
@@ -32,7 +28,6 @@ class BaseScene{
 
 		/** Helper functions for creating, configuring, and getting the canvas **/
 		createCanvasElement(){
-			console.log("Base Scene:  Configuring canvas element");
 			this.canvasElement = document.createElement("canvas");
 			UIGenerator.ConfigureCanvas(this.canvasElement);
 	
@@ -42,11 +37,7 @@ class BaseScene{
 			return this.canvasElement;
 		}
 
-		configureCanvasElement(canvasElement){
-			UIGenerator.ConfigureCanvas(canvasElement);
-
-		}
-
+	
 
 		addSprite(sprite){
 			this.sprites.push(sprite);
@@ -159,8 +150,6 @@ class BaseScene{
 
 
 		checkForGameWinOrLoss(){
-
-		
 
 			if(this.hasLostGame()){
 				

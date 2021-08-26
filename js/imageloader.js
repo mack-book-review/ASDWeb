@@ -22,7 +22,7 @@ class ImageLoader{
 		console.log("Preloading img #" + index + "...");
 
 		var path = this.imgPaths[index];
-		var img = document.createElement("img");
+		var img = new Image();
 		img.src = path;
 		this.loadedImages.push(img);
 

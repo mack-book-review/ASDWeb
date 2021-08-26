@@ -8,6 +8,7 @@
 			
 			//Store a reference to the container
 			this.container = document.getElementById(container_id);
+
 			this.configureContainerEventListeners();
 
 			//Create the canva
@@ -35,7 +36,7 @@
 
 				var msg = UIGenerator.CreateNextLevelMessage("Congratulations! You won!",
 					200,200,
-					"/assets/Medals/flat_medal1.png",
+					"./assets/Medals/flat_medal1.png",
 					function(){
 						var nextLevel = currentGame.scene.levelConfiguration.levelNumber + 1;
 						
@@ -57,7 +58,7 @@
 				function(){
 					currentGame.scene.isLost = true;
 
-					var msg = UIGenerator.CreateGameFinishedMessage("I'm Sorry! You Lost!",200,200,"/assets/Smilies/annoyed.png");
+					var msg = UIGenerator.CreateGameFinishedMessage("I'm Sorry! You Lost!",200,200,"./assets/Smilies/annoyed.png");
 					currentGame.addToContainer(msg);
 
 			});
@@ -68,6 +69,14 @@
 				var sprites = event.detail.totalSprites;
 				var kills = event.detail.killCount;
 				currentGame.updateHUD(sprites,kills);
+
+			});
+
+			this.container.addEventListener("playerupdate", function(event){
+				
+				var health = event.detail.health;
+				var numberBullets = event.detail.numberBullets;
+				currentGame.updateHUDPlayerInfo(health,numberBullets);
 
 			});
 
@@ -98,28 +107,30 @@
 
 		createTitleBanner(){
 			this.titleBannerText = "Current Level: " + this.scene.levelConfiguration.levelNumber;
-			this.titleElement = UIGenerator.CreateTitleBanner(this.titleBannerText);
+			this.titleElement = UIGenerator.CreateTitleBanner(this.titleBannerText,"./assets/Banners/bannerScroll.png");
 			this.addToContainer(this.titleElement);
 		}
 
 		updateTitleBanner(){
 				this.container.removeChild(this.titleElement);
 				this.titleBannerText = "Current Level: " + sessionStorage.getItem("currentLevel");
-				this.titleElement = UIGenerator.CreateTitleBanner(this.titleBannerText);
+				this.titleElement = UIGenerator.CreateTitleBanner(this.titleBannerText,"./assets/Banners/bannerScroll.png");
 				this.addToContainer(this.titleElement);
 		}
 
 		configureMenuPanel(){
-			var returnHomeButton = UIGenerator.GetReturnHomeButton('https://wordpress-648454-2114331.cloudwaysapps.com/elementor-623/');
+			var returnHomeButton = UIGenerator.GetReturnHomeButton('https://imposterdev.org/elementor-623/');
 			var instructionsButton = UIGenerator.GetInstructionsButton(this);
 			var crosshairSettingsButton = UIGenerator.GetCrosshairSettingsButton(this);
 			var button = UIGenerator.GetMusicSettingsButton(this);
 			var pauseButton = UIGenerator.GetPauseButton(this);
-
+			var inputControlButton = UIGenerator.GetInputControlsButton(this);
+			
 			this.addToMenuPanel(pauseButton);
 			this.addToMenuPanel(button);
 			this.addToMenuPanel(crosshairSettingsButton);
 			this.addToMenuPanel(instructionsButton);
+			this.addToMenuPanel(inputControlButton);
 			this.addToMenuPanel(returnHomeButton);
 
 		}
@@ -127,11 +138,12 @@
 
 		/** Helper methods for creating and configuring background music **/
 		setupBGMusic(){
-			var bgMusicAudio = document.createElement("audio");
 			this.bgMusicAudio = new Audio(); 
 			this.bgMusicAudio.src = "assets/Sounds/polka_train.ogg";
 			this.addToContainer(this.bgMusicAudio);
-	
+			
+			var bgMusicAudio = this.bgMusicAudio;
+			
 			this.container.addEventListener("mousemove", function () {
     			bgMusicAudio.play();
 
@@ -154,6 +166,12 @@
 			this.hud.updateKillCount(totalKills);
 			this.hud.updateHUD();
 		}
+
+		updateHUDPlayerInfo(health,numberBullets){
+			this.hud.updateHealth(health);
+			this.hud.updateNumberOfBullets(numberBullets);
+			this.hud.updateHUD();
+		};
 
 		
 		//Run the game loop

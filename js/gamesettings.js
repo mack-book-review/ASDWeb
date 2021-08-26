@@ -4,8 +4,8 @@ class GameSettings{
 	static DefaultScreenHeight = 420;
 	static DefaultFrameRate = 20;
 
-	static WidthAdjustmentFactor = 0.41;
-	static HeightAdjustmentFactor = 0.36;
+	static WidthAdjustmentFactor_740 = 0.41;
+	static HeightAdjustmentFactor_420 = 0.36;
 
 	static LoadDefaultGameSettings(){
 		return new GameSettings();
